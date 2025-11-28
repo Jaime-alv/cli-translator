@@ -1,6 +1,6 @@
 package com.github.jaime.translator.service;
 
-import java.net.ConnectException;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;
@@ -11,76 +11,45 @@ import java.net.http.HttpRequest.BodyPublishers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.jaime.translator.configuration.Config;
 import com.github.jaime.translator.exception.APIException;
 import com.github.jaime.translator.exception.impl.ConnectionException;
+import com.github.jaime.translator.exception.impl.JsonException;
 import com.github.jaime.translator.exception.impl.MalformedURLException;
-import com.github.jaime.translator.mapping.JsonMapper;
-import com.github.jaime.translator.model.SendForTranslation;
-
+import com.github.jaime.translator.model.ClientResponse;
+import com.github.jaime.translator.model.SendData;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class ClientConnection {
 
     private static final Logger logger = LogManager.getLogger();
+    private final HttpClient client = buildClient();
 
-    private URI uri;
     private final String url;
-    private final SendForTranslation body;
-    private Config config = Config.getInstance();
+    private final SendData body;
+    private final String apiKey;
 
-    /**
-     * Respuesta completa en formato String, así evitamos llamar varias veces para
-     * comprobar el estado de la url
-     */
-    private HttpResponse<String> response;
-    private final HttpClient client;
-
-    public ClientConnection(String url, SendForTranslation body) throws APIException {
+    public ClientConnection(String url, SendData body, String apiKey) throws APIException {
         this.url = url;
-        this.client = buildClient();
         this.body = body;
+        this.apiKey = apiKey;
     }
 
-    public ClientConnection connect() throws ConnectionException {
+    public ClientResponse send() throws ConnectionException {
         try {
-            this.response = this.buildHttpResponse();
+            HttpResponse<String> response = sendToClient();
+            return new ClientResponse(response.statusCode(), response.body());
         } catch (Exception e) {
-            throw new ConnectionException(String.format("Error while connecting to %s", this.uri.toString()), e);
+            throw new ConnectionException(String.format("Error while connecting to %s", this.url),
+                    e);
         }
-        return this;
-
     }
 
-    public String getURL() {
-        return this.url;
-    }
-
-    static final URI intoUri(String url) throws MalformedURLException {
+    final URI intoUri() throws MalformedURLException {
         try {
-            return new URL(url).toURI();
+            return new URL(this.url).toURI();
         } catch (Exception e) {
             throw new MalformedURLException(url);
-        }
-
-    }
-
-    protected HttpResponse<String> buildHttpResponse() throws APIException {
-        this.uri = ClientConnection.intoUri(this.url);
-        logger.debug("Reach out <{}>", this.url);
-        BodyPublisher body = BodyPublishers.ofString("");
-        HttpRequest request = HttpRequest.newBuilder(this.uri).header("Content-Type", "application/json")
-                .header("Authorization", authKey()).POST(body).build();
-        HttpResponse<String> tmpResponse = null;
-        try {
-            tmpResponse = this.sendToClient(request);
-            logger.debug("Response code {}", tmpResponse.statusCode());
-            return tmpResponse;
-        } catch (Exception e) {
-            logger.error(e);
-            throw new ConnectionException(String.format("Error while building HttpResponse to %s", this.url), e);
         }
 
     }
@@ -89,39 +58,28 @@ public class ClientConnection {
         return HttpClient.newBuilder().followRedirects(Redirect.ALWAYS).build();
     }
 
-    protected HttpResponse<String> sendToClient(HttpRequest request) throws Exception, ConnectException {
+    protected HttpResponse<String> sendToClient() throws APIException {
         try {
+            HttpRequest request = buildRequest();
             return client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (ConnectException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new Exception(e);
+        } catch (InterruptedException | IOException e) {
+            logger.error(e);
+            throw new ConnectionException("Error while sending the request", e);
+
         }
-
     }
 
-    protected String authKey() {
-        return String.format("DeepL-Auth-Key %s", this.config.apiKey);
+    protected HttpRequest buildRequest() throws APIException {
+        URI uri = intoUri();
+        BodyPublisher body = bodyPublisher();
+        HttpRequest request = HttpRequest.newBuilder(uri).header("Content-Type", "application/json")
+                .header("Authorization", this.apiKey).POST(body).build();
+        return request;
     }
 
-    class InnerTest {
-
-    }
-
-    protected BodyPublisher bodyPublisher() throws JsonProcessingException {
-        return BodyPublishers.ofString(JsonMapper.stringify(body));
-    }
-
-    public Integer getResponseCode() {
-        return response.statusCode();
-    }
-
-    public String getResponseBody() {
-        return response.body();
-
-    }
-
-    public HttpResponse<String> getResponse() {
-        return this.response;
+    protected BodyPublisher bodyPublisher() throws JsonException {
+        String value = body.asJson();
+        logger.debug(value);
+        return BodyPublishers.ofString(value);
     }
 }

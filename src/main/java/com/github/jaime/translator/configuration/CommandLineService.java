@@ -95,11 +95,11 @@ public class CommandLineService {
         return cmd.getOptionValue("api-key");
     }
 
-    public Optional<String> getTargetLanguage() {
-        return Optional.ofNullable(cmd.getOptionValue("target"));
+    public String getTargetLanguage() {
+        return cmd.getOptionValue("target");
     }
 
-    public Optional<String> getFromLanguage() {
-        return Optional.ofNullable(cmd.getOptionValue("from"));
+    public String getFromLanguage() {
+        return cmd.getOptionValue("from");
     }
 }

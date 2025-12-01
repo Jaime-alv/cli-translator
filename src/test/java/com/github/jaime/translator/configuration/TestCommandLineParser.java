@@ -42,12 +42,12 @@ public class TestCommandLineParser {
     void shouldReturnTargetLanguage() throws APIException {
         String[] args = new String[] { "-target", "ES" };
         String[] newArgs = addArg(args);
-        assertEquals("ES", cmd.parse(newArgs).getTargetLanguage().get());
+        assertEquals("ES", cmd.parse(newArgs).getTargetLanguage());
     }
 
     @Test
     void shouldReturnDefault() throws APIException {
-        assertTrue(cmd.parse(DEFAULT).getTargetLanguage().isEmpty());
+        assertEquals(null, cmd.parse(DEFAULT).getTargetLanguage());
     }
 
     @Test

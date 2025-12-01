@@ -21,12 +21,20 @@ public class ConfigAdapterFromCMD implements ConfigAdapter {
 
     @Override
     public Language getTargetLanguage() throws ParserException {
-        return Language.parse(cmd.getTargetLanguage().orElse("GB"));
+        String lang = cmd.getTargetLanguage();
+        if (lang == null) {
+            return null;
+        }
+        return Language.parse(lang);
     }
 
     @Override
     public Language getFromLanguage() throws ParserException {
-        return Language.parse(cmd.getFromLanguage().orElse("ES"));
+        String lang = cmd.getFromLanguage();
+        if (lang == null) {
+            return null;
+        }
+        return Language.parse(lang);
     }
 
     @Override

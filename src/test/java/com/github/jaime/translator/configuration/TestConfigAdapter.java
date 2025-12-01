@@ -28,39 +28,39 @@ public class TestConfigAdapter {
 
     @Test
     void shouldReturnDefaultLanguageIfEmpty() throws ParserException {
-        when(mockCMD.getTargetLanguage()).thenReturn(Optional.empty());
-        assertEquals(Language.BRITISH, configAdapterFromCMD.getTargetLanguage());
+        when(mockCMD.getTargetLanguage()).thenReturn(null);
+        assertEquals(null, configAdapterFromCMD.getTargetLanguage());
     }
 
     @Test
     void shouldThrowAExceptionIfNotValid() {
-        when(mockCMD.getTargetLanguage()).thenReturn(Optional.of("random"));
+        when(mockCMD.getTargetLanguage()).thenReturn("random");
         assertThrows(ParserException.class, () -> configAdapterFromCMD.getTargetLanguage());
     }
 
     @ParameterizedTest
     @ValueSource(strings = { "es", "  es", "ES", "es   " })
     void allShouldBeValid(String lang) throws ParserException {
-        when(mockCMD.getTargetLanguage()).thenReturn(Optional.of(lang));
+        when(mockCMD.getTargetLanguage()).thenReturn(lang);
         assertEquals(Language.class, configAdapterFromCMD.getTargetLanguage().getClass());
     }
 
     @Test
     void shouldReturnDefaultFromLanguageIfEmpty() throws ParserException {
-        when(mockCMD.getFromLanguage()).thenReturn(Optional.empty());
-        assertEquals(Language.SPANISH, configAdapterFromCMD.getFromLanguage());
+        when(mockCMD.getFromLanguage()).thenReturn(null);
+        assertEquals(null, configAdapterFromCMD.getFromLanguage());
     }
 
     @Test
     void shouldThrowAExceptionIfNotValidFromLanguage() {
-        when(mockCMD.getFromLanguage()).thenReturn(Optional.of("random"));
+        when(mockCMD.getFromLanguage()).thenReturn("random");
         assertThrows(ParserException.class, () -> configAdapterFromCMD.getFromLanguage());
     }
 
     @ParameterizedTest
     @ValueSource(strings = { "es", "  es", "ES", "es   " })
     void allShouldBeValidForFromLang(String lang) throws ParserException {
-        when(mockCMD.getFromLanguage()).thenReturn(Optional.of(lang));
+        when(mockCMD.getFromLanguage()).thenReturn(lang);
         assertEquals(Language.class, configAdapterFromCMD.getFromLanguage().getClass());
     }
 

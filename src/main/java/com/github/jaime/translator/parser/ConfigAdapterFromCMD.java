@@ -1,9 +1,4 @@
-package com.github.jaime.translator.configuration;
-
-import java.util.Optional;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+package com.github.jaime.translator.parser;
 
 import com.github.jaime.translator.exception.impl.ParserException;
 import com.github.jaime.translator.mapping.ConfigAdapter;
@@ -12,7 +7,6 @@ import com.github.jaime.translator.series.Language;
 
 public class ConfigAdapterFromCMD implements ConfigAdapter {
 
-    private Logger logger = LogManager.getLogger();
     private final CommandLineService cmd;
 
     public ConfigAdapterFromCMD(CommandLineService cmd) {
@@ -43,12 +37,20 @@ public class ConfigAdapterFromCMD implements ConfigAdapter {
     }
 
     @Override
-    public String getAPIKey() {
-        return cmd.getApiKey();
+    public String getAPIKey() throws ParserException {
+        String possibleKey = cmd.getApiKey().trim();
+        if (possibleKey.isBlank()) {
+            throw new ParserException("key is empty");
+        }
+        return possibleKey;
     }
 
     @Override
-    public String getMessage() {
-        return cmd.getMessage();
+    public String getMessage() throws ParserException {
+        String possibleMessage = cmd.getMessage().trim();
+        if (possibleMessage.isBlank()) {
+            throw new ParserException("text is empty");
+        }
+        return possibleMessage;
     }
 }

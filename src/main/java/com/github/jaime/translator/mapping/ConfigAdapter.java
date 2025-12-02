@@ -12,7 +12,7 @@ public interface ConfigAdapter {
 
     APIMode getApiMode() throws ParserException;
 
-    String getAPIKey();
+    String getAPIKey() throws ParserException;
 
-    String getMessage();
+    String getMessage() throws ParserException;
 }

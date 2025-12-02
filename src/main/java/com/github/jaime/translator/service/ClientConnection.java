@@ -22,7 +22,8 @@ import java.net.http.HttpResponse;
 
 public class ClientConnection {
 
-    private static final Logger logger = LogManager.getLogger();
+    private final Logger logger = LogManager.getLogger();
+
     private final HttpClient client = buildClient();
 
     private final String url;

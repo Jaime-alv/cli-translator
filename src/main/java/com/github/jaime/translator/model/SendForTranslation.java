@@ -2,7 +2,7 @@ package com.github.jaime.translator.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jaime.translator.exception.impl.JsonException;
-import com.github.jaime.translator.mapping.JsonMapper;
+import com.github.jaime.translator.mapping.json.JsonTransformer;
 import com.github.jaime.translator.series.Language;
 
 public class SendForTranslation implements SendData{
@@ -26,22 +26,19 @@ public class SendForTranslation implements SendData{
         private String targetLang;
         private String fromLang;
 
-        public Builder(String text, Language target) {
+        public Builder() {};
+
+        public Builder text(String text) {
             String[] a = new String[1];
             a[0] = text;
             this.text = a;
-            this.targetLang = target.value;
+            return this;
         }
 
-        // public Builder text(String text) {
-        //     this.text = text;
-        //     return this;
-        // }
-
-        // public Builder targetLang(Language lang) {
-        //     this.targetLang = lang.value;
-        //     return this;
-        // }
+        public Builder targetLang(Language lang) {
+            this.targetLang = lang.value;
+            return this;
+        }
 
         public Builder fromLang(Language lang) {
             this.fromLang = lang.value;
@@ -55,6 +52,6 @@ public class SendForTranslation implements SendData{
 
     @Override
     public String asJson() throws JsonException {
-        return JsonMapper.stringify(this);
+        return JsonTransformer.stringify(this);
     }
 }

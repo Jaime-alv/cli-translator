@@ -4,6 +4,7 @@ import com.github.jaime.translator.exception.impl.ParserException;
 
 public enum Language {
 
+    ENGLISH("EN"),
     BRITISH("EN-GB"),
     AMERICAN("EN-US"),
     DEUTSCH("DE"),
@@ -28,7 +29,9 @@ public enum Language {
             case "DE":
                 return Language.DEUTSCH;
             case "FR":
-                return Language.FRENCH;   
+                return Language.FRENCH;
+            case "EN":
+                return Language.ENGLISH;
             default:
                 throw new ParserException(lang);
         }

@@ -14,7 +14,7 @@ public class TestCommandLineParser {
 
     private CommandLineService cmd = new CommandLineService();
 
-    private String[] DEFAULT = { "-mode", "spelling", "-text", "Hello world", "-api-key", "token" };
+    private String[] DEFAULT = { "-mode", "spelling", "-api-key", "token" };
 
     private String[] addArg(String[] args) {
         Stream<String> defaultArgs = Arrays.stream(DEFAULT);
@@ -54,6 +54,8 @@ public class TestCommandLineParser {
 
     @Test
     void shouldReturnMessage() throws APIException {
-        assertEquals("Hello world", cmd.parse(DEFAULT).getMessage());
+        String[] args = new String[] {"-text", "Hello world"};
+        String [] newArgs = addArg(args);
+        assertEquals("Hello world", cmd.parse(newArgs).getMessage());
     }
 }

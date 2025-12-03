@@ -1,4 +1,4 @@
-package com.github.jaime.translator.mapping;
+package com.github.jaime.translator.parser.adapter;
 
 import com.github.jaime.translator.exception.impl.ParserException;
 import com.github.jaime.translator.series.APIMode;

@@ -1,7 +1,7 @@
 package com.github.jaime.translator.parser;
 
 import com.github.jaime.translator.exception.impl.InvalidKeyException;
-import com.github.jaime.translator.mapping.TranslateAdapter;
+import com.github.jaime.translator.parser.adapter.TranslateAdapter;
 import com.github.jaime.translator.series.Language;
 
 public class TranslateFromConfig implements TranslateAdapter {

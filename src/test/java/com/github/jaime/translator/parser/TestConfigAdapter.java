@@ -2,16 +2,13 @@ package com.github.jaime.translator.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.github.jaime.translator.exception.impl.ParserException;
@@ -74,45 +71,30 @@ public class TestConfigAdapter {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { "", "  " })
-    void shouldThrowEmptyException(String text) {
-        when(mockCMD.getMessage()).thenReturn(text);
-        assertThrows(ParserException.class, () -> configAdapterFromCMD.getMessage());
+    @ValueSource(strings = { "", "  ", "key", "valid:fx" })
+    void shouldReturnAnyKey(String emptyKey) {
+        when(mockCMD.getApiKey()).thenReturn(emptyKey);
+        assertTrue(configAdapterFromCMD.getAPIKey().getClass().equals(String.class));
     }
 
-    private static Stream<Arguments> textProvider() {
-        return Stream.of(Arguments.of("Hello", "Hello"), Arguments.of("Hello", "  Hello"),
-                Arguments.of("Hello", "Hello   "), Arguments.of("HeLlO", "HeLlO")
-
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("textProvider")
-    void shouldCleanWhiteSpacesAndMaintainFormat(String expected, String input)
-            throws ParserException {
-        when(mockCMD.getMessage()).thenReturn(input);
-        assertEquals(expected, configAdapterFromCMD.getMessage());
+    @Test
+    void shouldAcceptNullValue() {
+        when(mockCMD.getApiKey()).thenReturn(null);
+        assertEquals(null, configAdapterFromCMD.getAPIKey());
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { "", "   " })
-    void shouldThrowParserExceptionIfEmptyApiKey(String key) {
-        when(mockCMD.getApiKey()).thenReturn(key);
-        assertThrows(ParserException.class, () -> configAdapterFromCMD.getAPIKey());
+    @ValueSource(strings = { "", "  ", "key", "valid:fx" })
+    void shouldReturnAnyMessage(String message) {
+        when(mockCMD.getMessage()).thenReturn(message);
+        assertTrue(configAdapterFromCMD.getMessage().getClass().equals(String.class));
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = { "  key", "key", "key   ", "key", " key    " })
-    void shouldTrimApiKey(String key) throws ParserException {
-        when(mockCMD.getApiKey()).thenReturn(key);
-        assertEquals("key", configAdapterFromCMD.getAPIKey());
+    @Test
+    void shouldAcceptNullValueForMessage() {
+        when(mockCMD.getMessage()).thenReturn(null);
+        assertEquals(null, configAdapterFromCMD.getMessage());
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = { "k e y", "k e y ", "k e y  ", " k e y", "   k e y", "  k e y  " })
-    void shouldMaintainInternalWhiteSpaces(String key) throws ParserException {
-        when(mockCMD.getApiKey()).thenReturn(key);
-        assertEquals("k e y", configAdapterFromCMD.getAPIKey());
-    }
+
 }

@@ -7,10 +7,10 @@ public interface ApiKeyAdapter {
     String getApiKey() throws InvalidKeyException;
 
     static String validateKey(String key) throws InvalidKeyException {
-        String rawValue = key.trim();
-        if (rawValue.endsWith(":fx")) {
-            return String.format("DeepL-Auth-Key %s", rawValue);
+        if (key == null || !key.trim().endsWith(":fx")) {
+            throw new InvalidKeyException();
         }
-        throw new InvalidKeyException();
+        return String.format("DeepL-Auth-Key %s", key.trim());
+
     }
 }

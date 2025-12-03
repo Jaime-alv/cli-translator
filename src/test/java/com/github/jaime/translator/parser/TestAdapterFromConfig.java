@@ -16,6 +16,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.github.jaime.translator.exception.impl.InvalidKeyException;
+import com.github.jaime.translator.exception.impl.ValidationException;
 import com.github.jaime.translator.series.Language;
 
 public class TestAdapterFromConfig {
@@ -77,4 +78,46 @@ public class TestAdapterFromConfig {
         when(config.getFrom()).thenReturn(Optional.of(Language.DEUTSCH));
         assertEquals(Language.DEUTSCH, adapter.getFromLanguage());
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "", "  " })
+    void shouldThrowEmptyException(String text) {
+        when(config.getTextToTranslate()).thenReturn(text);
+        assertThrows(ValidationException.class, () -> adapter.getMessage());
+    }
+
+    private static Stream<Arguments> textProvider() {
+        return Stream.of(Arguments.of("Hello", "Hello"), Arguments.of("Hello", " Hello"),
+                Arguments.of("Hello", "Hello "), Arguments.of("HeLlO", "HeLlO")
+
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("textProvider")
+    void shouldCleanWhiteSpacesAndMaintainFormat(String expected, String input)
+            throws ValidationException {
+        when(config.getTextToTranslate()).thenReturn(input);
+        assertEquals(expected, adapter.getMessage());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "", " " })
+    void shouldThrowParserExceptionIfEmptyApiKey(String key) {
+        when(config.getApiKey()).thenReturn(key);
+        assertThrows(InvalidKeyException.class, () -> adapter.getApiKey());
+    }
+
+    @Test
+    void shouldThrowExceptionIfNull() {
+        when(config.getApiKey()).thenReturn(null);
+        assertThrows(InvalidKeyException.class, () -> adapter.getApiKey());
+    }
+
+    @Test
+    void shouldThrowExceptionIfNullMessage() {
+        when(config.getTextToTranslate()).thenReturn(null);
+        assertThrows(ValidationException.class, () -> adapter.getMessage());
+    }
+
 }

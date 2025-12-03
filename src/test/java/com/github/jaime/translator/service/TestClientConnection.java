@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -15,24 +16,26 @@ import org.junit.jupiter.params.provider.ValueSource;
 import com.github.jaime.translator.exception.APIException;
 import com.github.jaime.translator.exception.impl.MalformedURLException;
 import com.github.jaime.translator.model.ClientResponse;
-import com.github.jaime.translator.model.SendForTranslation;
 
 public class TestClientConnection {
 
-    private static String URL = "https://api-free.deepl.com/v2/translate";
-    private static SendForTranslation example = new SendForTranslation.Builder()
-            .text("Hello, world!").build();
-    private static String APIKey = "DeepL-Auth-Key :fx";
+    private static class DemoConnection extends ClientConnection {
 
-    private static ClientConnection client;
+        @Override
+        protected HttpRequest buildRequest() throws APIException {
+            return HttpRequest.newBuilder(intoUri()).GET().build();
+        }
+    }
 
     private static HttpResponse<String> response;
+    private static DemoConnection client;
 
     @SuppressWarnings("unchecked")
     @BeforeAll
     static void setUp() throws APIException {
-        client = spy(new ClientConnection(URL, example, APIKey));
         response = (HttpResponse<String>) mock(HttpResponse.class);
+        client = spy(new DemoConnection());
+        client.url = "https://www.random.com";
 
     }
 
@@ -48,7 +51,7 @@ public class TestClientConnection {
     @ParameterizedTest
     @ValueSource(strings = { "httpsapi-random.com", "www.unknown.es" })
     void allInvalidUrlsShouldFail(String url) throws APIException {
-        ClientConnection client = new ClientConnection(url, example, APIKey);
+        client.url = url;
         assertThrows(MalformedURLException.class, () -> client.intoUri());
     }
 }

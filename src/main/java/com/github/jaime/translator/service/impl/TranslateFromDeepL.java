@@ -14,6 +14,7 @@ import com.github.jaime.translator.model.SendForTranslation;
 import com.github.jaime.translator.series.Language;
 import com.github.jaime.translator.service.ClientConnection;
 import com.github.jaime.translator.service.TranslationService;
+import com.github.jaime.translator.service.http.PostClientConnection;
 
 public class TranslateFromDeepL implements TranslationService{
 
@@ -41,7 +42,7 @@ public class TranslateFromDeepL implements TranslationService{
 
     ClientResponse sendForTranslation() throws APIException {
         SendForTranslation body = buildBody();
-        ClientConnection service = new ClientConnection(URL, body, apiKey);
+        ClientConnection service = new PostClientConnection(URL, body, apiKey);
         logger.debug("Create new connection service.");
         return service.send();
     }

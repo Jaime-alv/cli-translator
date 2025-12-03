@@ -14,7 +14,7 @@ public class ErrorMessage  implements ResponseInterface{
 
     ErrorMessage() {}
 
-    ErrorMessage(String message) {
+    public ErrorMessage(String message) {
         this.message = message;
     }
 

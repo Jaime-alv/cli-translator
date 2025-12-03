@@ -4,10 +4,6 @@ import com.github.jaime.translator.exception.APIException;
 
 public class JsonException extends APIException{
 
-    public JsonException(String msg) {
-        super(msg);
-    }
-
     public JsonException(String msg, Throwable err) {
         super(msg, err);
     }

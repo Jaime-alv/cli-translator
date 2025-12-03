@@ -53,7 +53,7 @@ public class TestJsonTransformer {
     void shouldReturnAProperDataSender() throws JsonException {
         SendForTranslation data = new SendForTranslation.Builder().text("DEMO")
                 .targetLang(Language.BRITISH).build();
-        String expected = "{\"text\":[\"DEMO\"],\"target_lang\":\"EN-GB\"}";
+        String expected = "{\"text\":[\"DEMO\"],\"target_lang\":\"EN-GB\",\"source_lang\":null}";
         assertEquals(expected, JsonTransformer.stringify(data));
     }
 

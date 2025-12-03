@@ -27,7 +27,7 @@ public class TestTranslateFromDeepL {
 
         @Override
         public String getApiKey() throws InvalidKeyException {
-            return "API-KEY";
+            return "DeepL-Auth-Key :fx";
         }
 
         @Override
@@ -66,7 +66,7 @@ public class TestTranslateFromDeepL {
     @Test
     void shouldCreateBody() throws JsonException {
         assertEquals(SendForTranslation.class, translator.buildBody().getClass());
-        assertEquals("{\"text\":[\"Hello world\"],\"target_lang\":\"DE\"}", translator.buildBody().asJson());
+        assertEquals("{\"text\":[\"Hello world\"],\"target_lang\":\"DE\",\"source_lang\":\"EN\"}", translator.buildBody().asJson());
     }
 
 }

@@ -25,6 +25,11 @@ public class QuotaResponse implements ResponseInterface {
         this.charLimit = 500000;
     }
 
+    public QuotaResponse(int charCount, int charLimit) {
+        this.charCount = charCount;
+        this.charLimit = charLimit;
+    }
+
     @Override
     public String getText() {
         String quota = formatQuota(getQuotaPercentage());

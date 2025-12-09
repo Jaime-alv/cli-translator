@@ -2,6 +2,7 @@ package com.github.jaime.translator.service;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpClient.Redirect;
@@ -25,20 +26,16 @@ public abstract class ClientConnection {
 
     protected ClientConnection() {}
 
-    public ClientResponse send() throws ConnectionException {
-        try {
-            HttpResponse<String> response = sendToClient();
-            return new ClientResponse(response.statusCode(), response.body());
-        } catch (Exception e) {
-            throw new ConnectionException(String.format("Error while connecting to %s", this.url),
-                    e);
-        }
+    public ClientResponse send() throws APIException {
+        HttpResponse<String> response = sendToClient();
+        return new ClientResponse(response.statusCode(), response.body());
+
     }
 
     protected URI intoUri() throws MalformedURLException {
         try {
             return new URL(this.url).toURI();
-        } catch (Exception e) {
+        } catch (java.net.MalformedURLException | URISyntaxException e) {
             throw new MalformedURLException(url);
         }
 

@@ -7,7 +7,8 @@ import com.github.jaime.translator.exception.impl.ParserException;
 
 public enum APIMode {
     TRANSLATE,
-    SPELLING;
+    SPELLING,
+    QUOTA;
 
     private static Logger logger = LogManager.getLogger();
 

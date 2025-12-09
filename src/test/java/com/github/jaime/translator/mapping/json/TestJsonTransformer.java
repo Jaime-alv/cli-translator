@@ -53,7 +53,7 @@ public class TestJsonTransformer {
     void shouldReturnAProperDataSender() throws JsonException {
         SendForTranslation data = new SendForTranslation.Builder().text("DEMO")
                 .targetLang(Language.BRITISH).build();
-        String expected = "{\"text\":[\"DEMO\"],\"target_lang\":\"EN-GB\"}";
+        String expected = "{\"text\":[\"DEMO\"],\"target_lang\":\"EN-GB\",\"source_lang\":null}";
         assertEquals(expected, JsonTransformer.stringify(data));
     }
 
@@ -61,5 +61,12 @@ public class TestJsonTransformer {
     void shouldThrowExceptionForInvalidErrorResponse() {
         String message = "{\"random\": \"BOOM\"}";
         assertThrows(JsonException.class, () -> JsonTransformer.fromErrorResponse(message));
+    }
+
+    @Test
+    void shouldReturnAQuota() throws JsonException {
+        String response = "{\"character_count\":1400,\"character_limit\":500000}";
+        QuotaResponse quota = new QuotaResponse(1400);
+        assertEquals(quota, JsonTransformer.fromQuotaResponse(response));
     }
 }

@@ -13,12 +13,16 @@ public class SendForTranslation implements SendData{
     @JsonProperty("target_lang")
     String targetLang;
 
+    @JsonProperty("source_lang")
+    String sourceLang;
+
     public SendForTranslation() {
     };
 
     private SendForTranslation(Builder builder) {
         this.text = builder.text;
         this.targetLang = builder.targetLang;
+        this.sourceLang = builder.fromLang;
     }
 
     public static class Builder {

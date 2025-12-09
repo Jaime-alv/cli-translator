@@ -41,4 +41,12 @@ public class JsonTransformer {
 
     }
 
+    public static QuotaResponse fromQuotaResponse(String response) throws JsonException {
+        try {
+            return mapper.readValue(response, QuotaResponse.class);
+        } catch (Exception e) {
+            throw new JsonException(String.format("Fail processing string %s", response), e);
+        }
+    }
+
 }

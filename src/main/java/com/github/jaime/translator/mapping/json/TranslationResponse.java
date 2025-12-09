@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jaime.translator.mapping.ResponseInterface;
 
-class TranslationResponse implements ResponseInterface{
+public class TranslationResponse implements ResponseInterface{
 
     @JsonProperty("translations")
     Translation[] translations;

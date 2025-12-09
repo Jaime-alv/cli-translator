@@ -56,7 +56,7 @@ public class CommandLineService {
 
     private static Option parseText() {
         Option texOption = Option.builder("text").argName("message").hasArg()
-                .desc("Text for translation.").required().get();
+                .desc("Text for translation.").get();
         return texOption;
     }
 

@@ -1,7 +1,9 @@
 package com.github.jaime.translator.parser;
 
 import com.github.jaime.translator.exception.impl.InvalidKeyException;
-import com.github.jaime.translator.mapping.TranslateAdapter;
+import com.github.jaime.translator.exception.impl.ValidationException;
+import com.github.jaime.translator.parser.adapter.TranslateAdapter;
+import com.github.jaime.translator.parser.adapter.base.ApiKeyAdapter;
 import com.github.jaime.translator.series.Language;
 
 public class TranslateFromConfig implements TranslateAdapter {
@@ -12,18 +14,18 @@ public class TranslateFromConfig implements TranslateAdapter {
     }
 
     @Override
-    public String getMessage() {
-        return config.getTextToTranslate();
+    public String getMessage() throws ValidationException {
+        if (config.getTextToTranslate() == null || config.getTextToTranslate().trim().isBlank()) {
+            throw new ValidationException();
+        }
+        return config.getTextToTranslate().trim();
     }
 
     @Override
     public String getApiKey() throws InvalidKeyException {
         String rawValue = config.getApiKey();
-        if (rawValue.endsWith(":fx")) {
-            return String.format("DeepL-Auth-Key %s", rawValue);
-        }
-        throw new InvalidKeyException();
-        
+        return ApiKeyAdapter.validateKey(rawValue);
+
     }
 
     @Override

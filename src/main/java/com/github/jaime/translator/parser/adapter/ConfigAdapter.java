@@ -1,4 +1,4 @@
-package com.github.jaime.translator.mapping;
+package com.github.jaime.translator.parser.adapter;
 
 import com.github.jaime.translator.exception.impl.ParserException;
 import com.github.jaime.translator.series.APIMode;
@@ -12,7 +12,7 @@ public interface ConfigAdapter {
 
     APIMode getApiMode() throws ParserException;
 
-    String getAPIKey() throws ParserException;
+    String getAPIKey();
 
-    String getMessage() throws ParserException;
+    String getMessage();
 }

@@ -1,7 +1,7 @@
 package com.github.jaime.translator.parser;
 
 import com.github.jaime.translator.exception.impl.ParserException;
-import com.github.jaime.translator.mapping.ConfigAdapter;
+import com.github.jaime.translator.parser.adapter.ConfigAdapter;
 import com.github.jaime.translator.series.APIMode;
 import com.github.jaime.translator.series.Language;
 
@@ -37,20 +37,12 @@ public class ConfigAdapterFromCMD implements ConfigAdapter {
     }
 
     @Override
-    public String getAPIKey() throws ParserException {
-        String possibleKey = cmd.getApiKey().trim();
-        if (possibleKey.isBlank()) {
-            throw new ParserException("key is empty");
-        }
-        return possibleKey;
+    public String getAPIKey(){
+        return cmd.getApiKey();
     }
 
     @Override
-    public String getMessage() throws ParserException {
-        String possibleMessage = cmd.getMessage().trim();
-        if (possibleMessage.isBlank()) {
-            throw new ParserException("text is empty");
-        }
-        return possibleMessage;
+    public String getMessage(){
+        return cmd.getMessage();
     }
 }

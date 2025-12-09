@@ -6,16 +6,18 @@ import org.apache.logging.log4j.Logger;
 import com.github.jaime.translator.exception.APIException;
 import com.github.jaime.translator.exception.impl.InvalidKeyException;
 import com.github.jaime.translator.exception.impl.JsonException;
+import com.github.jaime.translator.exception.impl.ValidationException;
 import com.github.jaime.translator.mapping.ResponseInterface;
-import com.github.jaime.translator.mapping.TranslateAdapter;
 import com.github.jaime.translator.mapping.json.JsonTransformer;
 import com.github.jaime.translator.model.ClientResponse;
 import com.github.jaime.translator.model.SendForTranslation;
+import com.github.jaime.translator.parser.adapter.TranslateAdapter;
 import com.github.jaime.translator.series.Language;
 import com.github.jaime.translator.service.ClientConnection;
 import com.github.jaime.translator.service.TranslationService;
+import com.github.jaime.translator.service.http.PostClientConnection;
 
-public class TranslateFromDeepL implements TranslationService{
+public class TranslateFromDeepL extends TranslationService {
 
     private final Logger logger = LogManager.getLogger();
 
@@ -26,7 +28,8 @@ public class TranslateFromDeepL implements TranslationService{
     private final Language targetLanguage;
     private final String textToTranslate;
 
-    public TranslateFromDeepL(TranslateAdapter adapter) throws InvalidKeyException {
+    public TranslateFromDeepL(TranslateAdapter adapter)
+            throws InvalidKeyException, ValidationException {
         this.apiKey = adapter.getApiKey();
         this.fromLanguage = adapter.getFromLanguage();
         this.targetLanguage = adapter.getTargetLanguage();
@@ -39,27 +42,23 @@ public class TranslateFromDeepL implements TranslationService{
                 .fromLang(fromLanguage).build();
     }
 
-    ClientResponse sendForTranslation() throws APIException {
-        SendForTranslation body = buildBody();
-        ClientConnection service = new ClientConnection(URL, body, apiKey);
-        logger.debug("Create new connection service.");
-        return service.send();
-    }
-
-    ResponseInterface returnResponseBody(ClientResponse response) throws JsonException {
+    @Override
+    protected ResponseInterface returnResponseBody(ClientResponse response) throws JsonException {
         logger.debug("Parse response from client.");
         switch (response.statusCode) {
         case 200:
             return JsonTransformer.fromOkResponse(response.body);
         default:
             logger.warn("Response code {}!", response.statusCode);
-            return JsonTransformer.fromErrorResponse(response.body);
+            return parseErrorMessage(response.body);
         }
     }
 
     @Override
-    public ResponseInterface getResponse() throws APIException {
-        ClientResponse response = sendForTranslation();
-        return returnResponseBody(response);
+    protected ClientConnection prepareRequest() throws APIException {
+        SendForTranslation body = buildBody();
+        ClientConnection service = new PostClientConnection(URL, body, apiKey);
+        logger.debug("Create new connection service.");
+        return service;
     }
 }

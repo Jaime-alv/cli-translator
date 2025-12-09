@@ -1,11 +1,15 @@
 package com.github.jaime.translator.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.spy;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
+import com.github.jaime.translator.exception.APIException;
 import com.github.jaime.translator.exception.impl.InvalidKeyException;
 import com.github.jaime.translator.exception.impl.JsonException;
 import com.github.jaime.translator.exception.impl.ValidationException;
@@ -15,6 +19,7 @@ import com.github.jaime.translator.model.ClientResponse;
 import com.github.jaime.translator.model.SendForTranslation;
 import com.github.jaime.translator.parser.adapter.TranslateAdapter;
 import com.github.jaime.translator.series.Language;
+import com.github.jaime.translator.service.http.PostClientConnection;
 
 public class TestTranslateFromDeepL {
 
@@ -48,9 +53,10 @@ public class TestTranslateFromDeepL {
         translator = spy(new TranslateFromDeepL(new InnerConstructor()));
     }
 
-    @Test
-    void shouldReturnErrorResponse() throws JsonException {
-        ClientResponse response = new ClientResponse(400, "{\"message\": \"Forbidden\"}");
+    @ParameterizedTest
+    @ValueSource(ints = {201, 204, 400, 500})
+    void shouldReturnErrorResponse(int statusCode) throws JsonException {
+        ClientResponse response = new ClientResponse(statusCode, "{\"message\": \"Forbidden\"}");
         ErrorMessage expected = new ErrorMessage("Forbidden");
         assertEquals(expected, translator.returnResponseBody(response));
     }
@@ -69,4 +75,8 @@ public class TestTranslateFromDeepL {
         assertEquals("{\"text\":[\"Hello world\"],\"target_lang\":\"DE\",\"source_lang\":\"EN\"}", translator.buildBody().asJson());
     }
 
+    @Test
+    void shouldCreatePostClient() throws APIException {
+        assertTrue(translator.prepareRequest() instanceof PostClientConnection);
+    }
 }

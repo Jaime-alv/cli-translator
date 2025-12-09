@@ -92,7 +92,8 @@
                             <mainClass>com.github.jaime.translator.Main</mainClass>
                         </manifest>
                     </archive>
-                    <!--                    <outputDirectory>.</outputDirectory> -->
+                    <outputDirectory>.</outputDirectory>
+                    <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
                 <executions>
                     <execution>

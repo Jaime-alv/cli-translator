@@ -1,11 +1,11 @@
 # translatorAPI
 
-![GitHub License](https://img.shields.io/github/license/Jaime-alv/chat-translator)
-![GitHub Tag](https://img.shields.io/github/v/tag/Jaime-alv/chat-translator?color=009EDB)
-![Static Badge](https://img.shields.io/badge/scoverage-%3E90%25-green?logo=apachemaven&logoColor=C71A36)
+![GitHub License](https://img.shields.io/github/license/Jaime-alv/cli-translator)
+![GitHub Tag](https://img.shields.io/github/v/tag/Jaime-alv/cli-translator?color=009EDB)
+![Static Badge](https://img.shields.io/badge/Coverage-%3E75%25-green?logo=apachemaven&logoColor=C71A36)
 
 
-![Workflow](https://github.com/Jaime-alv/chat-translator/actions/workflows/maven.yml/badge.svg?label=Scoverage)
+![Workflow](https://github.com/Jaime-alv/cli-translator/actions/workflows/maven.yml/badge.svg?label=Coverage)
 
 
 Java App to connect to the public endpoint of DeepL and translate texts conveniently from the command line terminal.
@@ -32,7 +32,7 @@ mvn clean package
 
 ```sh
 export API_KEY = "<API-KEY>"
-java -jar target/chat-translator-jar-with-dependencies.jar \ 
+java -jar translator-api.jar \ 
     -mode translate \ 
     -text "Construir una API de traducción" \ 
     -api-key $API_KEY
@@ -50,9 +50,8 @@ translator() {
 input=$1
 target_language=$2
 from_language=$3
-output="$(java -jar $HOME/scripts/chat-translator.jar -mode translate -text "${input}" -api-key $DEEPL -target $target_language -from $from_language)"
-echo -e ">>>\n${output}\n>>>"
-echo $output | clip.exe
+output="$(java -jar $HOME/scripts/translator-api.jar -mode translate -text "${input}" -api-key $DEEPL -target $target_language -from $from_language)"
+echo -e "${output}"
 }
 
 # Next functions works as shortcuts.

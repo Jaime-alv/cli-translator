@@ -8,11 +8,12 @@ import static org.mockito.Mockito.when;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.github.jaime.translator.exception.impl.InvalidKeyException;
+import com.github.jaime.translator.exception.impl.validation.InvalidKeyException;
+import com.github.jaime.translator.parser.adapter.ConfigAdapter;
 
 public class TestQuotaAdapter {
 
-    private Config config = mock(Config.class);
+    private ConfigAdapter config = mock(ConfigAdapter.class);
     private QuotaFromConfig quotaFromConfig = new QuotaFromConfig(config);
 
     @ParameterizedTest

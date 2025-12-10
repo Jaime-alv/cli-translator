@@ -4,9 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.github.jaime.translator.exception.APIException;
-import com.github.jaime.translator.exception.impl.InvalidKeyException;
 import com.github.jaime.translator.exception.impl.JsonException;
-import com.github.jaime.translator.exception.impl.ValidationException;
+import com.github.jaime.translator.exception.impl.validation.ValidationException;
 import com.github.jaime.translator.mapping.ResponseInterface;
 import com.github.jaime.translator.mapping.json.JsonTransformer;
 import com.github.jaime.translator.model.ClientResponse;
@@ -29,7 +28,7 @@ public class TranslateFromDeepL extends TranslationService {
     private final String textToTranslate;
 
     public TranslateFromDeepL(TranslateAdapter adapter)
-            throws InvalidKeyException, ValidationException {
+            throws ValidationException {
         this.apiKey = adapter.getApiKey();
         this.fromLanguage = adapter.getFromLanguage();
         this.targetLanguage = adapter.getTargetLanguage();

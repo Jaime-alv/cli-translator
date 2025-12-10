@@ -37,12 +37,12 @@ public class ConfigAdapterFromCMD implements ConfigAdapter {
     }
 
     @Override
-    public String getAPIKey(){
+    public String getApiKey(){
         return cmd.getApiKey();
     }
 
     @Override
-    public String getMessage(){
+    public String getTextToTranslate(){
         return cmd.getMessage();
     }
 }

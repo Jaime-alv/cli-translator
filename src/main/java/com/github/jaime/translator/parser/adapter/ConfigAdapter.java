@@ -15,4 +15,8 @@ public interface ConfigAdapter {
     String getApiKey();
 
     String getTextToTranslate();
+
+    static Language intoLanguage(String lang) throws ParserException {
+        return lang == null ? null : Language.parse(lang);
+    }
 }

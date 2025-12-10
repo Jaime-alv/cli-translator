@@ -9,8 +9,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.github.jaime.translator.exception.APIException;
-import com.github.jaime.translator.exception.impl.InvalidKeyException;
 import com.github.jaime.translator.exception.impl.JsonException;
+import com.github.jaime.translator.exception.impl.validation.InvalidKeyException;
+import com.github.jaime.translator.exception.impl.validation.ValidationException;
 import com.github.jaime.translator.mapping.json.ErrorMessage;
 import com.github.jaime.translator.mapping.json.QuotaResponse;
 import com.github.jaime.translator.model.ClientResponse;
@@ -31,7 +32,7 @@ public class TestQuotaFromDeepL {
     private static QuotaFromDeepL quota;
 
     @BeforeAll
-    static void setUp() throws InvalidKeyException {
+    static void setUp() throws ValidationException {
         quota = new QuotaFromDeepL(new InnerClass());
     }
 

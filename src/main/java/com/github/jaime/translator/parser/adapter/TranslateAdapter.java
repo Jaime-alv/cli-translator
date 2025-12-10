@@ -1,7 +1,6 @@
 package com.github.jaime.translator.parser.adapter;
 
-import com.github.jaime.translator.exception.impl.InvalidKeyException;
-import com.github.jaime.translator.exception.impl.ValidationException;
+import com.github.jaime.translator.exception.impl.validation.ValidationException;
 import com.github.jaime.translator.parser.adapter.base.ApiKeyAdapter;
 import com.github.jaime.translator.parser.adapter.base.MessageAdapter;
 import com.github.jaime.translator.series.Language;
@@ -12,11 +11,11 @@ public interface TranslateAdapter extends ApiKeyAdapter, MessageAdapter {
     String getMessage() throws ValidationException ;
 
     @Override
-    String getApiKey() throws InvalidKeyException;
+    String getApiKey() throws ValidationException;
 
     @Override
-    Language getTargetLanguage();
+    Language getTargetLanguage() throws ValidationException;
 
     @Override
-    Language getFromLanguage();
+    Language getFromLanguage() throws ValidationException;
 }

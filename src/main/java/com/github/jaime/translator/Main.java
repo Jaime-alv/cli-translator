@@ -6,13 +6,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.github.jaime.translator.exception.APIException;
-import com.github.jaime.translator.exception.impl.InvalidKeyException;
-import com.github.jaime.translator.exception.impl.ValidationException;
+import com.github.jaime.translator.exception.impl.ParserException;
+import com.github.jaime.translator.exception.impl.validation.InvalidKeyException;
+import com.github.jaime.translator.exception.impl.validation.ValidationException;
 import com.github.jaime.translator.parser.CommandLineService;
-import com.github.jaime.translator.parser.Config;
 import com.github.jaime.translator.parser.ConfigAdapterFromCMD;
 import com.github.jaime.translator.parser.QuotaFromConfig;
 import com.github.jaime.translator.parser.TranslateFromConfig;
+import com.github.jaime.translator.parser.adapter.ConfigAdapter;
 import com.github.jaime.translator.service.TranslationService;
 import com.github.jaime.translator.service.impl.QuotaFromDeepL;
 import com.github.jaime.translator.service.impl.TranslateFromDeepL;
@@ -27,21 +28,21 @@ public class Main {
         CommandLineService cmd = new CommandLineService().parse(args);
 
         logger.debug("Parse cmd input.");
-        Config config = Config.getInstance(new ConfigAdapterFromCMD(cmd));
+        ConfigAdapterFromCMD adapter = new ConfigAdapterFromCMD(cmd);
 
-        TranslationService service = serviceSelector(config);
+        TranslationService service = serviceSelector(adapter);
         Optional<String> v = Optional.ofNullable(service.getResponse().getText());
 
         System.out.println(v.orElse("EMPTY!"));
     }
 
-    static TranslationService serviceSelector(Config config)
-            throws InvalidKeyException, ValidationException {
-        switch (config.getMode()) {
+    static TranslationService serviceSelector(ConfigAdapter adapter)
+            throws InvalidKeyException, ValidationException, ParserException {
+        switch (adapter.getApiMode()) {
         case TRANSLATE:
-            return new TranslateFromDeepL(new TranslateFromConfig(config));
+            return new TranslateFromDeepL(new TranslateFromConfig(adapter));
         case QUOTA:
-            return new QuotaFromDeepL(new QuotaFromConfig(config));
+            return new QuotaFromDeepL(new QuotaFromConfig(adapter));
         default:
             logger.debug("No service selected.");
             return null;

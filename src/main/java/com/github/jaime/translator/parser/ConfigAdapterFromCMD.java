@@ -16,19 +16,13 @@ public class ConfigAdapterFromCMD implements ConfigAdapter {
     @Override
     public Language getTargetLanguage() throws ParserException {
         String lang = cmd.getTargetLanguage();
-        if (lang == null) {
-            return null;
-        }
-        return Language.parse(lang);
+        return ConfigAdapter.intoLanguage(lang);
     }
 
     @Override
     public Language getFromLanguage() throws ParserException {
         String lang = cmd.getFromLanguage();
-        if (lang == null) {
-            return null;
-        }
-        return Language.parse(lang);
+        return ConfigAdapter.intoLanguage(lang);
     }
 
     @Override
@@ -37,12 +31,12 @@ public class ConfigAdapterFromCMD implements ConfigAdapter {
     }
 
     @Override
-    public String getAPIKey(){
+    public String getApiKey(){
         return cmd.getApiKey();
     }
 
     @Override
-    public String getMessage(){
+    public String getTextToTranslate(){
         return cmd.getMessage();
     }
 }

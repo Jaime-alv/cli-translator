@@ -50,7 +50,7 @@ translator() {
 input=$1
 target_language=$2
 from_language=$3
-output="$(java -jar $HOME/scripts/translator-api.jar -mode translate -text "${input}" -api-key $DEEPL -target $target_language -from $from_language)"
+output="$(java -jar $HOME/.scripts/translator-api.jar -mode translate -text "${input}" -api-key $DEEPL -target $target_language -from $from_language)"
 echo -e "${output}"
 }
 
@@ -74,3 +74,27 @@ translator "${input}" "ES" "EN"
 ```
 
 Piping the output to a clipboard is rather convenient, just paste the output directly where it's need it.
+
+#### Add as shorcut for git
+
+Edit .gitconfig file, located under $HOME dir.
+
+```sh
+[alias]
+    tr = "!f () { msg=$(java -jar $HOME/.scripts/translator-api.jar -mode translate -text \"$1\" -api-key <API-KEY> -target GB -from ES) && git commit -am \"$msg\"; }; f"
+```
+
+Adding the API-KEY in a common file could make things easier if you need to track the api-key across several scripts.
+
+Create a `.keys` file under $HOME:
+
+```
+DEEPL="<your-api-key>"
+```
+
+Now it can be sourced from `.gitconfig` and `.bashrc`:
+
+```sh
+[alias]
+    tr = "!f () { . $HOME/.keys && msg=$(java -jar $HOME/.scripts/translator-api.jar -mode translate -text \"$1\" -api-key $DEEPL -target GB -from ES) && git commit -am \"$msg\"; }; f"
+```

@@ -15,18 +15,22 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.github.jaime.translator.exception.impl.InvalidKeyException;
-import com.github.jaime.translator.exception.impl.ValidationException;
+import com.github.jaime.translator.exception.APIException;
+import com.github.jaime.translator.exception.impl.ParserException;
+import com.github.jaime.translator.exception.impl.validation.InvalidKeyException;
+import com.github.jaime.translator.exception.impl.validation.MessageValidation;
+import com.github.jaime.translator.exception.impl.validation.ValidationException;
+import com.github.jaime.translator.parser.adapter.ConfigAdapter;
 import com.github.jaime.translator.series.Language;
 
 public class TestAdapterFromConfig {
 
-    private static Config config;
+    private static ConfigAdapter config;
     private TranslateFromConfig adapter = new TranslateFromConfig(config);
 
     @BeforeAll
     static void setUp() {
-        config = mock(Config.class);
+        config = mock(ConfigAdapter.class);
     }
 
     @ParameterizedTest
@@ -44,22 +48,30 @@ public class TestAdapterFromConfig {
     }
 
     @Test
-    void shouldGetDefaultTranslationLanguage() {
-        when(config.getTarget()).thenReturn(Optional.empty());
+    void shouldGetDefaultTranslationLanguage() throws ValidationException, ParserException {
+        when(config.getTargetLanguage()).thenReturn(null);
         assertEquals(Language.BRITISH, adapter.getTargetLanguage());
     }
 
     @Test
-    void shouldGetLanguage() {
-        when(config.getTarget()).thenReturn(Optional.of(Language.AMERICAN));
+    void shouldGetLanguage() throws APIException{
+        when(config.getTargetLanguage()).thenReturn(Language.AMERICAN);
         assertEquals(Language.AMERICAN, adapter.getTargetLanguage());
 
     }
 
     @Test
-    void shouldGetDefaultFromLanguage() {
-        when(config.getFrom()).thenReturn(Optional.empty());
+    void shouldGetDefaultFromLanguage() throws APIException {
+        when(config.getFromLanguage()).thenReturn(null);
         assertEquals(Language.SPANISH, adapter.getFromLanguage());
+    }
+
+    @Test
+    void shouldCastToProperException() {
+        assertThrows(ValidationException.class, () -> {
+            when(config.getTargetLanguage()).thenThrow(ParserException.class);
+            adapter.getTargetLanguage();
+        });
     }
 
     private static Stream<Arguments> languageProvider() {
@@ -68,14 +80,14 @@ public class TestAdapterFromConfig {
 
     @ParameterizedTest
     @MethodSource("languageProvider")
-    void shouldGetDefaultEnglish(Language value) {
-        when(config.getFrom()).thenReturn(Optional.of(value));
+    void shouldGetDefaultEnglish(Language value) throws APIException {
+        when(config.getFromLanguage()).thenReturn(value);
         assertEquals(Language.ENGLISH, adapter.getFromLanguage());
     }
 
     @Test
-    void shouldReturnInputLanguage() {
-        when(config.getFrom()).thenReturn(Optional.of(Language.DEUTSCH));
+    void shouldReturnInputLanguage() throws APIException {
+        when(config.getFromLanguage()).thenReturn(Language.DEUTSCH);
         assertEquals(Language.DEUTSCH, adapter.getFromLanguage());
     }
 
@@ -83,7 +95,7 @@ public class TestAdapterFromConfig {
     @ValueSource(strings = { "", "  " })
     void shouldThrowEmptyException(String text) {
         when(config.getTextToTranslate()).thenReturn(text);
-        assertThrows(ValidationException.class, () -> adapter.getMessage());
+        assertThrows(MessageValidation.class, () -> adapter.getMessage());
     }
 
     private static Stream<Arguments> textProvider() {
@@ -117,7 +129,7 @@ public class TestAdapterFromConfig {
     @Test
     void shouldThrowExceptionIfNullMessage() {
         when(config.getTextToTranslate()).thenReturn(null);
-        assertThrows(ValidationException.class, () -> adapter.getMessage());
+        assertThrows(MessageValidation.class, () -> adapter.getMessage());
     }
 
 }

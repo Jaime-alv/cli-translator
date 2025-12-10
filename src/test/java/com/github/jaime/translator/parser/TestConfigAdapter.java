@@ -74,26 +74,26 @@ public class TestConfigAdapter {
     @ValueSource(strings = { "", "  ", "key", "valid:fx" })
     void shouldReturnAnyKey(String emptyKey) {
         when(mockCMD.getApiKey()).thenReturn(emptyKey);
-        assertTrue(configAdapterFromCMD.getAPIKey().getClass().equals(String.class));
+        assertTrue(configAdapterFromCMD.getApiKey().getClass().equals(String.class));
     }
 
     @Test
     void shouldAcceptNullValue() {
         when(mockCMD.getApiKey()).thenReturn(null);
-        assertEquals(null, configAdapterFromCMD.getAPIKey());
+        assertEquals(null, configAdapterFromCMD.getApiKey());
     }
 
     @ParameterizedTest
     @ValueSource(strings = { "", "  ", "key", "valid:fx" })
     void shouldReturnAnyMessage(String message) {
         when(mockCMD.getMessage()).thenReturn(message);
-        assertTrue(configAdapterFromCMD.getMessage().getClass().equals(String.class));
+        assertTrue(configAdapterFromCMD.getTextToTranslate().getClass().equals(String.class));
     }
 
     @Test
     void shouldAcceptNullValueForMessage() {
         when(mockCMD.getMessage()).thenReturn(null);
-        assertEquals(null, configAdapterFromCMD.getMessage());
+        assertEquals(null, configAdapterFromCMD.getTextToTranslate());
     }
 
 

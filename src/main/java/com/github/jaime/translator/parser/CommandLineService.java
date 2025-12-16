@@ -31,7 +31,7 @@ public class CommandLineService {
         try {
             logger.debug("Parse arguments from command line {}", Arrays.stream(args).toString());
             this.cmd = parser.parse(options, args);
-            
+
             return this;
         } catch (ParseException exp) {
             logger.error(exp.getMessage());
@@ -40,12 +40,9 @@ public class CommandLineService {
     }
 
     private static void buildOptions() {
-        options
-            .addOption(parseMode())
-            .addOption(parseText())
-            .addOption(parseApiKey())
-            .addOption(parseTargetLanguage())
-            .addOption(parseFromLanguage());
+        options.addOption(parseMode()).addOption(parseText()).addOption(parseApiKey())
+                .addOption(parseTargetLanguage()).addOption(parseFromLanguage())
+                .addOption(parseContext());
     }
 
     private static Option parseMode() {
@@ -76,6 +73,11 @@ public class CommandLineService {
                 .get();
     }
 
+    private static Option parseContext() {
+        return Option.builder("context").argName("context").optionalArg(true)
+                .desc("Desired translation context").get();
+    }
+
     public String getApiMode() {
         return cmd.getOptionValue("mode");
     }
@@ -94,5 +96,9 @@ public class CommandLineService {
 
     public String getFromLanguage() {
         return cmd.getOptionValue("from");
+    }
+
+    public String getContext() {
+        return cmd.getOptionValue("context");
     }
 }

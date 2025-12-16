@@ -59,4 +59,9 @@ public class TranslateFromConfig implements TranslateAdapter {
         return rawLanguage;
     }
 
+    @Override
+    public String getContext() throws ValidationException {
+        return adapter.getContext();
+    }
+
 }

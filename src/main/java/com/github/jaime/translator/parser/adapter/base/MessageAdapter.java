@@ -10,4 +10,6 @@ public interface MessageAdapter {
     Language getTargetLanguage() throws ValidationException;
 
     Language getFromLanguage() throws ValidationException;
+
+    String getContext() throws ValidationException;
 }

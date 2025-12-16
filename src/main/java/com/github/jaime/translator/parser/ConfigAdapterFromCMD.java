@@ -39,4 +39,9 @@ public class ConfigAdapterFromCMD implements ConfigAdapter {
     public String getTextToTranslate(){
         return cmd.getMessage();
     }
+
+    @Override
+    public String getContext() {
+        return cmd.getContext();
+    }
 }

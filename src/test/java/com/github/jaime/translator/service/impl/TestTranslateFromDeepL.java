@@ -14,9 +14,9 @@ import com.github.jaime.translator.exception.impl.JsonException;
 import com.github.jaime.translator.exception.impl.validation.InvalidKeyException;
 import com.github.jaime.translator.exception.impl.validation.ValidationException;
 import com.github.jaime.translator.mapping.json.ErrorMessage;
+import com.github.jaime.translator.mapping.json.SendForTranslation;
 import com.github.jaime.translator.mapping.json.TranslationResponse;
 import com.github.jaime.translator.model.ClientResponse;
-import com.github.jaime.translator.model.SendForTranslation;
 import com.github.jaime.translator.parser.adapter.TranslateAdapter;
 import com.github.jaime.translator.series.Language;
 import com.github.jaime.translator.service.http.PostClientConnection;
@@ -44,6 +44,11 @@ public class TestTranslateFromDeepL {
         public Language getFromLanguage() {
             return Language.ENGLISH;
         }
+
+        @Override
+        public String getContext() throws ValidationException {
+            return "This is a context";
+        }
     }
 
     private static TranslateFromDeepL translator;
@@ -54,7 +59,7 @@ public class TestTranslateFromDeepL {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {201, 204, 400, 500})
+    @ValueSource(ints = { 201, 204, 400, 500 })
     void shouldReturnErrorResponse(int statusCode) throws JsonException {
         ClientResponse response = new ClientResponse(statusCode, "{\"message\": \"Forbidden\"}");
         ErrorMessage expected = new ErrorMessage("Forbidden");
@@ -70,9 +75,11 @@ public class TestTranslateFromDeepL {
     }
 
     @Test
-    void shouldCreateBody() throws JsonException {
+    void shouldCreateBody() throws JsonException, ValidationException {
         assertEquals(SendForTranslation.class, translator.buildBody().getClass());
-        assertEquals("{\"text\":[\"Hello world\"],\"target_lang\":\"DE\",\"source_lang\":\"EN\"}", translator.buildBody().asJson());
+        assertEquals(
+                "{\"text\":[\"Hello world\"],\"target_lang\":\"DE\",\"source_lang\":\"EN\",\"context\":\"This is a context\"}",
+                translator.buildBody().asJson());
     }
 
     @Test

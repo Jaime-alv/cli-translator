@@ -2,15 +2,11 @@ package com.github.jaime.translator.mapping.json;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.github.jaime.translator.exception.impl.JsonException;
-import com.github.jaime.translator.model.SendForTranslation;
 import com.github.jaime.translator.series.Language;
 
 public class TestJsonTransformer {
@@ -53,7 +49,7 @@ public class TestJsonTransformer {
     void shouldReturnAProperDataSender() throws JsonException {
         SendForTranslation data = new SendForTranslation.Builder().text("DEMO")
                 .targetLang(Language.BRITISH).build();
-        String expected = "{\"text\":[\"DEMO\"],\"target_lang\":\"EN-GB\",\"source_lang\":null}";
+        String expected = "{\"text\":[\"DEMO\"],\"target_lang\":\"EN-GB\"}";
         assertEquals(expected, JsonTransformer.stringify(data));
     }
 

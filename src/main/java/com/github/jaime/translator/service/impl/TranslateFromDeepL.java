@@ -8,10 +8,9 @@ import com.github.jaime.translator.exception.impl.JsonException;
 import com.github.jaime.translator.exception.impl.validation.ValidationException;
 import com.github.jaime.translator.mapping.ResponseInterface;
 import com.github.jaime.translator.mapping.json.JsonTransformer;
+import com.github.jaime.translator.mapping.json.SendForTranslation;
 import com.github.jaime.translator.model.ClientResponse;
-import com.github.jaime.translator.model.SendForTranslation;
 import com.github.jaime.translator.parser.adapter.TranslateAdapter;
-import com.github.jaime.translator.series.Language;
 import com.github.jaime.translator.service.ClientConnection;
 import com.github.jaime.translator.service.TranslationService;
 import com.github.jaime.translator.service.http.PostClientConnection;
@@ -22,23 +21,16 @@ public class TranslateFromDeepL extends TranslationService {
 
     private static String URL = "https://api-free.deepl.com/v2/translate";
 
-    private final String apiKey;
-    private final Language fromLanguage;
-    private final Language targetLanguage;
-    private final String textToTranslate;
+    private final TranslateAdapter adapter;
 
-    public TranslateFromDeepL(TranslateAdapter adapter)
-            throws ValidationException {
-        this.apiKey = adapter.getApiKey();
-        this.fromLanguage = adapter.getFromLanguage();
-        this.targetLanguage = adapter.getTargetLanguage();
-        this.textToTranslate = adapter.getMessage();
-
+    public TranslateFromDeepL(TranslateAdapter adapter) {
+        this.adapter = adapter;
     }
 
-    SendForTranslation buildBody() {
-        return new SendForTranslation.Builder().text(textToTranslate).targetLang(targetLanguage)
-                .fromLang(fromLanguage).build();
+    SendForTranslation buildBody() throws ValidationException {
+        return new SendForTranslation.Builder().text(adapter.getMessage())
+                .fromLang(adapter.getFromLanguage()).targetLang(adapter.getTargetLanguage())
+                .context(adapter.getContext()).build();
     }
 
     @Override
@@ -56,7 +48,7 @@ public class TranslateFromDeepL extends TranslationService {
     @Override
     protected ClientConnection prepareRequest() throws APIException {
         SendForTranslation body = buildBody();
-        ClientConnection service = new PostClientConnection(URL, body, apiKey);
+        ClientConnection service = new PostClientConnection(URL, body, adapter.getApiKey());
         logger.debug("Create new connection service.");
         return service;
     }

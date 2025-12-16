@@ -18,4 +18,7 @@ public interface TranslateAdapter extends ApiKeyAdapter, MessageAdapter {
 
     @Override
     Language getFromLanguage() throws ValidationException;
+
+    @Override
+    String getContext() throws ValidationException;
 }

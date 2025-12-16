@@ -58,4 +58,10 @@ public class TestCommandLineParser {
         String [] newArgs = addArg(args);
         assertEquals("Hello world", cmd.parse(newArgs).getMessage());
     }
+
+    @Test
+    void shouldReturnContext() throws APIException {
+        String[] args = addArg(new String[]{"-context", "this is context"});
+        assertEquals("this is context", cmd.parse(args).getContext());
+    }
 }

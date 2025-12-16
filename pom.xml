@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.jaime-alv</groupId>
     <artifactId>translator-api</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <!--  Project information  -->
     <description>"Send data with http request and translate the message."</description>
@@ -25,6 +25,12 @@
         <mockito.version>5.20.0</mockito.version>
         <log4j.version>2.3.2</log4j.version>
     </properties>
+
+    <scm>
+        <developerConnection>scm:git:https://github.com/Jaime-alv/cli-translator.git</developerConnection>
+        <url>https://github.com/Jaime-alv/cli-translator</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <dependencies>
 
@@ -145,7 +151,6 @@
                 <version>3.0.1</version>
                 <configuration>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
-                    <signTag>true</signTag>
                 </configuration>
             </plugin>
         </plugins>

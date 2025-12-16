@@ -27,7 +27,7 @@
     </properties>
 
     <scm>
-        <developerConnection>scm:git:https://github.com/Jaime-alv/cli-translator.git</developerConnection>
+        <developerConnection>scm:git:git@life.github.com:Jaime-alv/cli-translator.git</developerConnection>
         <url>https://github.com/Jaime-alv/cli-translator</url>
         <tag>HEAD</tag>
     </scm>

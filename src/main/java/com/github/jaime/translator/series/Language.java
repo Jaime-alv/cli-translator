@@ -1,7 +1,5 @@
 package com.github.jaime.translator.series;
 
-import com.github.jaime.translator.exception.impl.ParserException;
-
 public enum Language {
 
     ENGLISH("EN"),
@@ -9,31 +7,33 @@ public enum Language {
     AMERICAN("EN-US"),
     DEUTSCH("DE"),
     FRENCH("FR"),
-    SPANISH("ES");
+    SPANISH("ES"),
+    OTHER(null);
 
-    public final String value;
+    public String value;
+
+    private static void setOther(String unknownLanguage) {
+        Language.OTHER.value = unknownLanguage;
+    }
 
     private Language(String lang) {
         this.value = lang;
     }
 
-    public static Language parse(String lang) throws ParserException {
+    public static Language parse(String lang) {
         String normalizedLang = lang.toUpperCase().strip();
         switch (normalizedLang) {
             case "GB":
                 return Language.BRITISH;
             case "US":
                 return Language.AMERICAN;
-            case "ES":
-                return Language.SPANISH;     
-            case "DE":
-                return Language.DEUTSCH;
-            case "FR":
-                return Language.FRENCH;
-            case "EN":
-                return Language.ENGLISH;
             default:
-                throw new ParserException(lang);
+                try {
+                    return Language.valueOf(normalizedLang);
+                } catch (Exception e) {
+                    setOther(normalizedLang);
+                    return Language.OTHER;
+                }
         }
     }
 

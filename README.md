@@ -42,6 +42,10 @@ java -jar translator-api.jar -mode translate -text "Construir una API de traducc
 Building a translation API
 ```
 
+#### Supported languages
+
+[DeepL supported language list](https://developers.deepl.com/docs/getting-started/supported-languages#translation-target-languages)
+
 ## Building the package
 
 ### Pre-requisites

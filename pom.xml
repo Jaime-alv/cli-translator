@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.jaime-alv</groupId>
     <artifactId>translator-api</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3-SNAPSHOT</version>
     <packaging>jar</packaging>
     <!--  Project information  -->
     <description>"Send data with http request and translate the message."</description>
@@ -27,7 +27,7 @@
     <scm>
         <developerConnection>scm:git:git@life.github.com:Jaime-alv/cli-translator.git</developerConnection>
         <url>https://github.com/Jaime-alv/cli-translator</url>
-        <tag>v0.0.2</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <dependencies>

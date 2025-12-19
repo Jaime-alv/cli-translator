@@ -29,6 +29,7 @@ public class Main {
 
         logger.debug("Parse cmd input.");
         ConfigAdapterFromCMD adapter = new ConfigAdapterFromCMD(cmd);
+        logger.debug(adapter.toString());        
 
         TranslationService service = serviceSelector(adapter);
         Optional<String> v = Optional.ofNullable(service.getResponse().getText());

@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -66,7 +67,8 @@ public class TestAdapterFromConfig {
         assertEquals(Language.SPANISH, adapter.getFromLanguage());
     }
 
-    @Test
+    @Disabled
+    /* Old test, is not needed */
     void shouldCastToProperException() {
         assertThrows(ValidationException.class, () -> {
             when(config.getTargetLanguage()).thenThrow(ParserException.class);

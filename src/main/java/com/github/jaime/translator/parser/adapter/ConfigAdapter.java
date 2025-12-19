@@ -6,9 +6,9 @@ import com.github.jaime.translator.series.Language;
 
 public interface ConfigAdapter {
 
-    Language getTargetLanguage() throws ParserException;
+    Language getTargetLanguage();
 
-    Language getFromLanguage() throws ParserException;
+    Language getFromLanguage();
 
     APIMode getApiMode() throws ParserException;
 
@@ -18,7 +18,7 @@ public interface ConfigAdapter {
 
     String getContext();
 
-    static Language intoLanguage(String lang) throws ParserException {
+    static Language intoLanguage(String lang) {
         return lang == null ? null : Language.parse(lang);
     }
 }

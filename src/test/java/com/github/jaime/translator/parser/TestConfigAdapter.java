@@ -1,7 +1,6 @@
 package com.github.jaime.translator.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -31,14 +30,8 @@ public class TestConfigAdapter {
         assertEquals(null, configAdapterFromCMD.getTargetLanguage());
     }
 
-    @Test
-    void shouldThrowAExceptionIfNotValid() {
-        when(mockCMD.getTargetLanguage()).thenReturn("random");
-        assertThrows(ParserException.class, () -> configAdapterFromCMD.getTargetLanguage());
-    }
-
     @ParameterizedTest
-    @ValueSource(strings = { "es", "  es", "ES", "es   " })
+    @ValueSource(strings = { "es", "  es", "ES", "es   ", "random" })
     void allShouldBeValid(String lang) throws ParserException {
         when(mockCMD.getTargetLanguage()).thenReturn(lang);
         assertEquals(Language.class, configAdapterFromCMD.getTargetLanguage().getClass());
@@ -50,14 +43,9 @@ public class TestConfigAdapter {
         assertEquals(null, configAdapterFromCMD.getFromLanguage());
     }
 
-    @Test
-    void shouldThrowAExceptionIfNotValidFromLanguage() {
-        when(mockCMD.getFromLanguage()).thenReturn("random");
-        assertThrows(ParserException.class, () -> configAdapterFromCMD.getFromLanguage());
-    }
 
     @ParameterizedTest
-    @ValueSource(strings = { "es", "  es", "ES", "es   " })
+    @ValueSource(strings = { "es", "  es", "ES", "es   ", "other" })
     void allShouldBeValidForFromLang(String lang) throws ParserException {
         when(mockCMD.getFromLanguage()).thenReturn(lang);
         assertEquals(Language.class, configAdapterFromCMD.getFromLanguage().getClass());
@@ -96,5 +84,27 @@ public class TestConfigAdapter {
         assertEquals(null, configAdapterFromCMD.getTextToTranslate());
     }
 
+    @Test
+    void shouldReturnContextAsIs() {
+        when(mockCMD.getContext()).thenReturn(null);
+        assertEquals(null, configAdapterFromCMD.getContext());
+    }
+
+    @Test
+    void shouldReturnContextIfNotEmpty() {
+        String message = "Random DAta";
+        when(mockCMD.getContext()).thenReturn(message);
+        assertEquals(message, configAdapterFromCMD.getContext());
+    }
+
+    @Test
+    void shouldReturnAString() {
+        when(mockCMD.getApiMode()).thenReturn("translate");
+        when(mockCMD.getFromLanguage()).thenReturn("source");
+        when(mockCMD.getTargetLanguage()).thenReturn("target");
+        assertEquals(String.class, configAdapterFromCMD.toString().getClass());
+    }
+
+    
 
 }

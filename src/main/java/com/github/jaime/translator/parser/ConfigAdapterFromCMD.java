@@ -14,13 +14,13 @@ public class ConfigAdapterFromCMD implements ConfigAdapter {
     }
 
     @Override
-    public Language getTargetLanguage() throws ParserException {
+    public Language getTargetLanguage() {
         String lang = cmd.getTargetLanguage();
         return ConfigAdapter.intoLanguage(lang);
     }
 
     @Override
-    public Language getFromLanguage() throws ParserException {
+    public Language getFromLanguage() {
         String lang = cmd.getFromLanguage();
         return ConfigAdapter.intoLanguage(lang);
     }
@@ -31,17 +31,40 @@ public class ConfigAdapterFromCMD implements ConfigAdapter {
     }
 
     @Override
-    public String getApiKey(){
+    public String getApiKey() {
         return cmd.getApiKey();
     }
 
     @Override
-    public String getTextToTranslate(){
+    public String getTextToTranslate() {
         return cmd.getMessage();
     }
 
     @Override
     public String getContext() {
         return cmd.getContext();
+    }
+
+    @Override
+    public String toString() {
+        return "ConfigAdapterFromCMD [getTargetLanguage()=" + targetLang() + ", getFromLanguage()="
+                + fromLang() + ", getApiMode()=" + apiMode() + "]";
+
+    }
+
+    String fromLang() {
+        return getFromLanguage() == null ? "not set" : getFromLanguage().value;
+    }
+
+    String targetLang() {
+        return getTargetLanguage() == null ? "not set" : getTargetLanguage().value;
+    }
+
+    String apiMode() {
+        try {
+            return getApiMode().toString();
+        } catch (ParserException e) {
+            return "not set";
+        }
     }
 }

@@ -1,8 +1,6 @@
 package com.github.jaime.translator.parser;
 
-import com.github.jaime.translator.exception.impl.ParserException;
 import com.github.jaime.translator.exception.impl.validation.InvalidKeyException;
-import com.github.jaime.translator.exception.impl.validation.LanguageValidation;
 import com.github.jaime.translator.exception.impl.validation.MessageValidation;
 import com.github.jaime.translator.exception.impl.validation.ValidationException;
 import com.github.jaime.translator.parser.adapter.ConfigAdapter;
@@ -11,7 +9,6 @@ import com.github.jaime.translator.parser.adapter.base.ApiKeyAdapter;
 import com.github.jaime.translator.series.Language;
 
 public class TranslateFromConfig implements TranslateAdapter {
-
 
     private final ConfigAdapter adapter;
 
@@ -35,24 +32,14 @@ public class TranslateFromConfig implements TranslateAdapter {
     }
 
     @Override
-    public Language getTargetLanguage() throws ValidationException {
-        try {
-            return adapter.getTargetLanguage() == null ? Language.BRITISH
-                    : adapter.getTargetLanguage();
-        } catch (ParserException e) {
-            throw new LanguageValidation();
-        }
+    public Language getTargetLanguage() {
+        return adapter.getTargetLanguage() == null ? Language.BRITISH : adapter.getTargetLanguage();
     }
 
     @Override
-    public Language getFromLanguage() throws ValidationException {
-        Language rawLanguage;
-        try {
-            rawLanguage = adapter.getFromLanguage() == null ? Language.SPANISH
-                    : adapter.getFromLanguage();
-        } catch (ParserException e) {
-            throw new LanguageValidation();
-        }
+    public Language getFromLanguage() {
+        Language rawLanguage = adapter.getFromLanguage() == null ? Language.SPANISH
+                : adapter.getFromLanguage();
         if (rawLanguage.equals(Language.BRITISH) | rawLanguage.equals(Language.AMERICAN)) {
             return Language.ENGLISH;
         }

@@ -16,6 +16,7 @@ import com.github.jaime.translator.parser.TranslateFromConfig;
 import com.github.jaime.translator.parser.adapter.ConfigAdapter;
 import com.github.jaime.translator.service.TranslationService;
 import com.github.jaime.translator.service.impl.QuotaFromDeepL;
+import com.github.jaime.translator.service.impl.TranslateBetaFromDeepL;
 import com.github.jaime.translator.service.impl.TranslateFromDeepL;
 
 public class Main {
@@ -44,6 +45,8 @@ public class Main {
             return new TranslateFromDeepL(new TranslateFromConfig(adapter));
         case QUOTA:
             return new QuotaFromDeepL(new QuotaFromConfig(adapter));
+        case BETA:
+            return new TranslateBetaFromDeepL(new TranslateFromConfig(adapter));
         default:
             logger.debug("No service selected.");
             return null;

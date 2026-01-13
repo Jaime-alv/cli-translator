@@ -18,13 +18,13 @@ public class TestSendForTranslation {
     @ParameterizedTest
     @ValueSource(strings = { "DEMO", "", "  ", "demo" })
     void shouldBuildObject(String value) {
-        SendForTranslation data = new SendForTranslation.Builder().text(value).build();
+        SendForTranslation data = SendForTranslation.builder().text(value).build();
         assertEquals(value, Stream.of(data.text).findFirst().get());
     }
 
     @Test
     void shouldReturnAProperDataSender() throws JsonException {
-        SendForTranslation data = new SendForTranslation.Builder().text("DEMO")
+        SendForTranslation data = SendForTranslation.builder().text("DEMO")
                 .targetLang(Language.BRITISH).fromLang(Language.SPANISH).context("this is context")
                 .build();
         String expected = "{\"text\":[\"DEMO\"],\"target_lang\":\"EN-GB\",\"source_lang\":\"ES\",\"context\":\"this is context\"}";
@@ -33,7 +33,7 @@ public class TestSendForTranslation {
 
     @Test
     void shouldNotReturnNullValueForFromLangOrContext() throws JsonException {
-        SendForTranslation data = new SendForTranslation.Builder().text("DEMO")
+        SendForTranslation data = SendForTranslation.builder().text("DEMO")
                 .targetLang(Language.BRITISH).build();
         String expected = "{\"text\":[\"DEMO\"],\"target_lang\":\"EN-GB\"}";
         assumeTrue(data.context == null);
@@ -47,5 +47,10 @@ public class TestSendForTranslation {
         String[] textValue = SendForTranslation.Builder.intoText(value);
         assertTrue(textValue.length == 1);
         assertTrue(textValue[0] == "example");
+    }
+
+    @Test
+    void s() {
+        SendForTranslation a = new SendForTranslation.SendForTranslationBuilder().build();
     }
 }

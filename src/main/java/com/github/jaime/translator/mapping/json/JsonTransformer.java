@@ -9,7 +9,8 @@ import com.github.jaime.translator.exception.impl.JsonException;
 
 public class JsonTransformer {
 
-    static final ObjectMapper mapper = new ObjectMapper();
+    static final ObjectMapper mapper = new ObjectMapper()
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
     static final JsonMapper jsonMapper = JsonMapper.builder()
             .disable(MapperFeature.AUTO_DETECT_GETTERS).build();

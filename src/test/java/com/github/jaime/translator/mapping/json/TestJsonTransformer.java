@@ -1,11 +1,8 @@
 package com.github.jaime.translator.mapping.json;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-
 import com.github.jaime.translator.exception.impl.JsonException;
 import com.github.jaime.translator.series.Language;
 
@@ -25,6 +22,15 @@ public class TestJsonTransformer {
     }
 
     @Test
+    void shouldNotFailWithAddedFields() throws JsonException {
+        String example = "{\"translations\":[{\"detected_source_language\":\"ES\",\"text\":\"Hello, world!\",\"model_type_used\":\"quality_optimized\"}]}";
+        Translation translation = new Translation("ES", "Hello, world!");
+        Translation[] values = { translation };
+        TranslationResponse expected = new TranslationResponse(values);
+        assertEquals(expected, JsonTransformer.fromOkResponse(example));
+    }
+
+    @Test
     void shouldReturnProperErrorMessage() throws JsonException {
         String errorMessage = "{\"message\":\"Forbidden. You can find more info in our docs: ...\"}";
         ErrorMessage expected = new ErrorMessage(
@@ -32,11 +38,6 @@ public class TestJsonTransformer {
         assertEquals(expected, JsonTransformer.fromErrorResponse(errorMessage));
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = { "{\"random\": \"BOOM\"}" })
-    void shouldThrowException(String input) {
-        assertThrows(JsonException.class, () -> JsonTransformer.fromOkResponse(input));
-    }
 
     @Test
     void shouldReturnAString() throws JsonException {
@@ -47,16 +48,16 @@ public class TestJsonTransformer {
 
     @Test
     void shouldReturnAProperDataSender() throws JsonException {
-        SendForTranslation data = new SendForTranslation.Builder().text("DEMO")
+        SendForTranslation data = SendForTranslation.builder().text("DEMO")
                 .targetLang(Language.BRITISH).build();
         String expected = "{\"text\":[\"DEMO\"],\"target_lang\":\"EN-GB\"}";
         assertEquals(expected, JsonTransformer.stringify(data));
     }
 
     @Test
-    void shouldThrowExceptionForInvalidErrorResponse() {
+    void shouldNotThrowExceptionForInvalidErrorResponse() {
         String message = "{\"random\": \"BOOM\"}";
-        assertThrows(JsonException.class, () -> JsonTransformer.fromErrorResponse(message));
+        assertDoesNotThrow(() -> JsonTransformer.fromErrorResponse(message));
     }
 
     @Test

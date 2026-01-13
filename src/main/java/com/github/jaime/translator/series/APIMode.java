@@ -7,6 +7,7 @@ import com.github.jaime.translator.exception.impl.ParserException;
 
 public enum APIMode {
     TRANSLATE,
+    BETA,
     SPELLING,
     QUOTA;
 

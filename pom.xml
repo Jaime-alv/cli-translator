@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.jaime-alv</groupId>
     <artifactId>translator-api</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
     <packaging>jar</packaging>
     <!--  Project information  -->
     <description>"Send data with http request and translate the message."</description>

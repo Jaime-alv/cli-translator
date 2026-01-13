@@ -26,4 +26,9 @@ public class TestAPIMode {
     void unknownValueShouldThrowException() {
         assertThrows(ParserException.class, () -> APIMode.parse("random"));
     }
+
+    @Test
+    void shouldReturnBetaMode() throws ParserException {
+        assertEquals(APIMode.BETA, APIMode.parse("beta"));
+    }
 }

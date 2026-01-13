@@ -21,14 +21,14 @@ public class TranslateFromDeepL extends TranslationService {
 
     private static String URL = "https://api-free.deepl.com/v2/translate";
 
-    private final TranslateAdapter adapter;
+    protected final TranslateAdapter adapter;
 
     public TranslateFromDeepL(TranslateAdapter adapter) {
         this.adapter = adapter;
     }
 
     SendForTranslation buildBody() throws ValidationException {
-        return new SendForTranslation.Builder().text(adapter.getMessage())
+        return SendForTranslation.builder().text(adapter.getMessage())
                 .fromLang(adapter.getFromLanguage()).targetLang(adapter.getTargetLanguage())
                 .context(adapter.getContext()).build();
     }

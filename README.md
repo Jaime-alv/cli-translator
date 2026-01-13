@@ -17,7 +17,7 @@ Java App to connect to the public endpoint of DeepL and translate texts convenie
 
 | Option   | Description                                          |
 | -------- | ---------------------------------------------------- |
-| -mode    | Execution mode {`quota` \| `translate`}              |
+| -mode    | Execution mode {`quota` \| `translate` \| `beta`}    |
 | -api-key | DeepL free api key (Should end with `:fx`)           |
 | -text    | Text for translation via DeepL                       |
 | -target  | Target language                                      |
@@ -45,6 +45,12 @@ Building a translation API
 #### Supported languages
 
 [DeepL supported language list](https://developers.deepl.com/docs/getting-started/supported-languages#translation-target-languages)
+
+### Beta translate mode
+
+DeepL offers additional languages that are currently in Beta phase. These languages have limitations regarding feature support and translation quality.
+
+[DeepL supported beta language list](https://developers.deepl.com/docs/getting-started/supported-languages#beta-languages)
 
 ## Building the package
 

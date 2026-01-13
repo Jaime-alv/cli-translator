@@ -25,24 +25,27 @@ public class SendForTranslation implements SendData {
 
     public SendForTranslation() {};
 
-    private SendForTranslation(Builder builder) {
+    protected SendForTranslation(Builder<?> builder) {
         this.text = builder.text;
         this.targetLang = builder.targetLang;
         this.sourceLang = builder.fromLang;
         this.context = builder.context;
     }
 
-    public static class Builder {
+    public static abstract class Builder<T extends Builder<T>> {
+
         private String[] text;
         private String targetLang;
         private String fromLang;
         private String context;
 
-        public Builder() {};
+        protected abstract T self();
 
-        public Builder text(String text) {
+        public abstract SendForTranslation build();
+
+        public T text(String text) {
             this.text = intoText(text);
-            return this;
+            return self();
         }
 
         static String[] intoText(String message) {
@@ -52,24 +55,36 @@ public class SendForTranslation implements SendData {
 
         }
 
-        public Builder targetLang(Language lang) {
+        public T targetLang(Language lang) {
             this.targetLang = lang.value;
-            return this;
+            return self();
         }
 
-        public Builder fromLang(Language lang) {
+        public T fromLang(Language lang) {
             this.fromLang = lang.value;
+            return self();
+        }
+
+        public T context(String context) {
+            this.context = context;
+            return self();
+        }
+    }
+
+    public static class SendForTranslationBuilder extends Builder<SendForTranslationBuilder> {
+        @Override
+        protected SendForTranslationBuilder self() {
             return this;
         }
 
+        @Override
         public SendForTranslation build() {
             return new SendForTranslation(this);
         }
+    }
 
-        public Builder context(String context) {
-            this.context = context;
-            return this;
-        }
+    public static Builder<? extends Builder<?>> builder() {
+        return new SendForTranslationBuilder();
     }
 
     @Override
